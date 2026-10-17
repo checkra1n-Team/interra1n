@@ -117,7 +117,7 @@ Pass a PNG, JPEG, or BMP image with `--pongo-background` to replace the backgrou
 palera1n --pongo-background ./my-splash.png
 ```
 
-The image is resized to a maximum of 1024 pixels per side and center-cropped to fit the connected display. It is sent to the device for that run and is not saved on the device. The framebuffer renderer scales it for all iPhone models supported by this fork. The image is applied after PongoOS connects over USB; use `--pongo-shell` to leave the device at the PongoOS shell with the custom splash. Pass the option again on later runs to reuse the same image.
+The image is resized to a maximum of 1024 pixels per side and center-cropped to fit the connected display. It is sent to the device for that run and is not saved on the device. The framebuffer renderer scales it for all iPhone models supported by this fork. The image is applied after PongoOS connects over USB; use `--pongo-shell` to leave the device at the PongoOS shell with the custom splash. Pass the option again on later runs to reuse the same image. This option uses interra1n's bundled PongoOS image and cannot be combined with `--override-pongo`.
 
 ## Installing
 See the [interra1n releases](https://github.com/checkra1n-Team/interra1n/releases) for builds. For jailbreak setup and device requirements, read the [upstream palera1n guide](https://palera.in/).

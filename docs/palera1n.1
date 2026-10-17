@@ -197,6 +197,9 @@ Set a custom image behind the PongoOS raindrop splash. PNG, JPEG, and BMP files 
 supported. The image is sent for the current run, resized to a maximum of 1024 pixels
 per side, and center-cropped to fit the device display. It is applied after PongoOS
 connects over USB and works on iPhone models supported by this fork.
+This option cannot be combined with the
+.Fl -override-pongo
+option.
 .It Fl K , -override-kpf Ar KPF file
 Override the kernel patchfinder PongoOS module. The module is required to support setting
 root filesystem in paleinfo with
