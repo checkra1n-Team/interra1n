@@ -156,6 +156,12 @@ typedef unsigned char niarelap_file_t[];
 extern unsigned int verbose;
 
 extern char* pongo_path;
+extern uint8_t* pongo_background_rgb;
+extern uint32_t pongo_background_width;
+extern uint32_t pongo_background_height;
+extern uint32_t pongo_background_size;
+int pongo_background_load(const char* path);
+void pongo_background_free(void);
 #ifdef TUI
 extern bool tui_started;
 #endif

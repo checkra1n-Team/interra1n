@@ -2,6 +2,7 @@ SRC = $(shell pwd)
 DEP = $(SRC)/dep_root
 STRIP = strip
 CC ?= cc
+PONGO_HOST_CC ?= cc
 CFLAGS += -isystem $(DEP)/include -I$(SRC)/include -I$(SRC) -D_XOPEN_SOURCE=500
 CFLAGS += -Wall -Wextra -Wno-unused-parameter -DPALERAIN_VERSION=\"2.1\" -DHAVE_LIBIMOBILEDEVICE
 CFLAGS += -Wno-unused-variable -I$(SRC)/src -std=c99 -pedantic-errors -D_C99_SOURCE -D_POSIX_C_SOURCE=200112L
@@ -82,8 +83,17 @@ clean:
 	$(MAKE) -C src clean
 	$(MAKE) -C docs clean
 
-download-deps:
-	$(MAKE) -C src $(patsubst %, resources/%, checkra1n-macos checkra1n-linux-arm64 checkra1n-linux-armel checkra1n-linux-x86 checkra1n-linux-x86_64 checkra1n-kpf-pongo ramdisk.dmg binpack.dmg Pongo.bin)
+download-deps: pongo-background
+	$(MAKE) -C src $(patsubst %, resources/%, checkra1n-macos checkra1n-linux-arm64 checkra1n-linux-armel checkra1n-linux-x86 checkra1n-linux-x86_64 checkra1n-kpf-pongo ramdisk.dmg binpack.dmg)
+
+pongo-background:
+	git submodule update --init --recursive vendor/PongoOS
+	@if ! git -C vendor/PongoOS apply --unidiff-zero --reverse --check ../../patches/pongoos/interra1n-background.patch >/dev/null 2>&1; then \
+		git -C vendor/PongoOS apply --unidiff-zero ../../patches/pongoos/interra1n-background.patch; \
+	fi
+	$(MAKE) -C vendor/PongoOS build/Pongo.bin CC=$(PONGO_HOST_CC)
+	mkdir -p src/resources
+	cp vendor/PongoOS/build/Pongo.bin src/resources/Pongo.bin
 
 docs:
 	$(MAKE) -C docs
@@ -91,5 +101,5 @@ docs:
 distclean: clean
 	$(MAKE) -C src distclean
 
-.PHONY: all palera1n clean docs distclean
+.PHONY: all palera1n clean docs distclean download-deps pongo-background
 

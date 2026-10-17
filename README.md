@@ -1,8 +1,9 @@
-# palera1n
-[![GitHub Release](https://img.shields.io/github/v/release/palera1n/palera1n?include_prereleases)](https://github.com/palera1n/palera1n/releases)
-[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/palera1n/palera1n/total)](https://github.com/palera1n/palera1n/releases)
-[![GitHub License](https://img.shields.io/github/license/palera1n/palera1n?color=%23C96FAD)](https://github.com/palera1n/palera1n/blob/main/LICENSE)
+# interra1n
+[![GitHub Release](https://img.shields.io/github/v/release/checkra1n-Team/interra1n?include_prereleases)](https://github.com/checkra1n-Team/interra1n/releases)
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/checkra1n-Team/interra1n/total)](https://github.com/checkra1n-Team/interra1n/releases)
+[![GitHub License](https://img.shields.io/github/license/checkra1n-Team/interra1n?color=%23C96FAD)](https://github.com/checkra1n-Team/interra1n/blob/main/LICENSE)
 
+Interra1n is a community fork of [palera1n](https://github.com/palera1n/palera1n), the checkm8-based jailbreak for A8–A11 and T2 devices. It follows palera1n's supported-device and platform requirements while adding fork-specific changes. Read the [upstream palera1n guide](https://palera.in/) for background on the jailbreak and its device requirements.
 
 Jailbreak for A8 through A11, T2 devices, on iOS/iPadOS/tvOS 15.0, bridgeOS 5.0 and higher.
 
@@ -77,7 +78,7 @@ Jailbreak for A8 through A11, T2 devices, on iOS/iPadOS/tvOS 15.0, bridgeOS 5.0 
 
 ## Usage 
 ```
-Usage: palera1n [-DEhpvVdsSLRnPI] [-e boot arguments] [-k Pongo image] [-o overlay file] [-r ramdisk file] [-K KPF file] [-i checkra1n file]
+Usage: palera1n [-DEhgpvVdsSLRnPI] [-e boot arguments] [-k Pongo image] [-g background image] [-o overlay file] [-r ramdisk file] [-K KPF file] [-i checkra1n file]
 
 	--version				Print version
 	--force-revert				Remove jailbreak
@@ -88,6 +89,7 @@ Usage: palera1n [-DEhpvVdsSLRnPI] [-e boot arguments] [-k Pongo image] [-o overl
 	-h, --help				Show this help
 	-i, --override-checkra1n <file>		Override checkra1n
 	-k, --override-pongo <file>		Override Pongo image
+	-g, --pongo-background <image>	Set the PongoOS raindrop splash background (PNG, JPEG, BMP)
 	-K, --override-kpf <file>		Override kernel patchfinder
 	-L, --jbinit-log-to-file		Make jbinit log to /cores/jbinit.log (can be read from sandbox while jailbroken)
 	-n, --exit-recovery			Exit recovery mode
@@ -107,8 +109,22 @@ Environmental variables:
 	TMPDIR		temporary diretory (path the built-in checkra1n will be extracted to)
 ```
 
+### Custom PongoOS splash
+
+Pass a PNG, JPEG, or BMP image with `--pongo-background` to replace the background behind the PongoOS raindrop during boot:
+
+```sh
+palera1n --pongo-background ./my-splash.png
+```
+
+The image is resized to a maximum of 1024 pixels per side and center-cropped to fit the connected display. It is sent to the device for that run and is not saved on the device. The framebuffer renderer scales it for all iPhone models supported by this fork. The image is applied after PongoOS connects over USB; use `--pongo-shell` to leave the device at the PongoOS shell with the custom splash. Pass the option again on later runs to reuse the same image.
+
 ## Installing
-Visit https://palera.in
+See the [interra1n releases](https://github.com/checkra1n-Team/interra1n/releases) for builds. For jailbreak setup and device requirements, read the [upstream palera1n guide](https://palera.in/).
+
+## Building from source
+
+Clone this repository and run `make`. The build initializes the PongoOS source submodule and builds interra1n's patched PongoOS image before compiling the host tool. macOS builds require Xcode command line tools. Linux builds require `clang`, `ld64`, and `cctools-strip` in addition to the dependencies used by palera1n; see the [PongoOS build instructions](https://github.com/palera1n/PongoOS#building-on-linux).
 
 ## Disclaimers
 We are **NOT** responsible for any data loss, or the result of a device being bricked. When using palera1n, the user should accept responsibility if anything happens to their device during the process.
@@ -124,10 +140,14 @@ Make sure you're following the guides provided [here](https://palera.in), also w
 - Verbose from palera1n (specifying `-Vv` within palera1n)
 - Panic logs, if panicked then send latest `panic-full` log from your device.
 
-Create an issue here: https://github.com/palera1n/palera1n/issues/new/choose
+Create an issue here: https://github.com/checkra1n-Team/interra1n/issues/new/choose
 
 ## Credits
 
-[All credits for palera1n can be found here](https://palera.in/)
+Interra1n fork credit: **@xperia_remixes**.
 
-If proper credit isn't shown please message us or create an issue.
+The fork is based on palera1n. [Upstream palera1n credits](https://palera.in/) recognize the original project contributors.
+
+See [third-party notices](THIRD_PARTY_NOTICES.md) for PongoOS and image decoder licensing.
+
+If a credit is missing, please create an issue in this repository.

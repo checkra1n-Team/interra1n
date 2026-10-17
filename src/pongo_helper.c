@@ -46,9 +46,6 @@ static void *pongo_usb_callback(stuff_t *arg) {
 	}
 #endif
 	LOG(LOG_INFO, "Found PongoOS USB Device");
-	if (palerain_flags & palerain_option_pongo_exit)
-		goto done;
-
 	usb_device_handle_t handle = arg->handle;
 #ifdef TUI
 	if (tui_is_jailbreaking) {
@@ -57,7 +54,17 @@ static void *pongo_usb_callback(stuff_t *arg) {
     	tui_jailbreak_status_changed();
 	}
 #endif
-	issue_pongo_command(handle, NULL);	
+	issue_pongo_command(handle, NULL);
+	if (pongo_background_rgb != NULL) {
+		char background_command[64];
+		LOG(LOG_INFO, "Sending custom PongoOS splash background");
+		if (upload_pongo_file(handle, pongo_background_rgb, pongo_background_size) == USB_RET_SUCCESS) {
+			snprintf(background_command, sizeof(background_command), "fbimage %u %u", pongo_background_width, pongo_background_height);
+			issue_pongo_command(handle, background_command);
+		}
+	}
+	if (palerain_flags & palerain_option_pongo_exit)
+		goto done;
 	issue_pongo_command(handle, "fuse lock");
 	issue_pongo_command(handle, "sep auto");
 #ifdef TUI

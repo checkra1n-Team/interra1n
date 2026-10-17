@@ -167,6 +167,7 @@ static int palera1n(int argc, char *argv[], char *envp[]) {
 	}
 normal_exit:
 cleanup:
+	pongo_background_free();
 	if (override_kpf.magic == OVERRIDE_MAGIC) {
 		munmap(override_kpf.ptr, (size_t)override_kpf.len);
 		close(override_kpf.fd);

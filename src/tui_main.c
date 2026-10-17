@@ -60,8 +60,8 @@ int redraw_screen(void) {
     if (tui_version[0] == 'v') tui_version++;
 
     tui_draw_rectangle(0, 0, 79, 23);
-    MOVETOT((int)(80 - (strlen("[palera1n - Version ]") + strlen(tui_version) ) - 1), 1);
-    printf("[palera1n - Version %s]", tui_version);
+    MOVETOT((int)(80 - (strlen("[interra1n - Version ]") + strlen(tui_version) ) - 1), 1);
+    printf("[interra1n - Version %s]", tui_version);
     SETCOLOR(FG_WHITE, BG_BLACK);
     switch(tui_state) {
     case MAIN_SCREEN:

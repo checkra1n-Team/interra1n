@@ -179,7 +179,7 @@ $(RESOURCES_DIR)/binpack.dmg:
 	curl -Lfo $@ https://cdn.nickchan.lol/palera1n/c-rewrite/deps/binpack.dmg
 
 $(RESOURCES_DIR)/Pongo.bin:
-	curl -Lfo $@ https://cdn.nickchan.lol/palera1n/artifacts/kpf/iOS15/Pongo.bin
+	$(MAKE) -C .. pongo-background
 
 clean:
 	rm -rf $(OBJDIR)/*.o $(GENDIR)/*.c $(GENDIR)/*.o palera1n palera1n.dSYM $(RESOURCES_DIR)/libcheckra1nhelper.dylib

@@ -44,6 +44,7 @@ static struct option longopts[] = {
 	{"version", no_argument, NULL, palerain_option_case_version},
 	{"override-libcheckra1nhelper", required_argument, NULL, palerain_option_case_libcheckra1nhelper_path},
 	{"override-pongo", required_argument, NULL, 'k'},
+	{"pongo-background", required_argument, NULL, 'g'},
 	{"override-overlay", required_argument, NULL, 'o'},
 	{"override-ramdisk", required_argument, NULL, 'r'},
 	{"override-kpf", required_argument, NULL, 'K'},
@@ -67,7 +68,7 @@ static int usage(int e, char* prog_name)
 {
 	fprintf(stderr,
 	"Usage: %s [-"
-	"DEhpvVldsSTLRnPI"
+	"DEhgpvVldsSTLRnPI"
 #ifdef DEV_BUILD
 			"12"
 #endif
@@ -77,8 +78,8 @@ static int usage(int e, char* prog_name)
 #ifdef TUI
 			"t"
 #endif
-			"] [-e boot arguments] [-k Pongo image] [-o overlay file] [-r ramdisk file] [-K KPF file] [-i checkra1n file]\n"
-			"Copyright (C) 2024, palera1n team, All Rights Reserved.\n\n"
+			"] [-e boot arguments] [-k Pongo image] [-g background image] [-o overlay file] [-r ramdisk file] [-K KPF file] [-i checkra1n file]\n"
+			"Copyright (C) 2024 palera1n contributors; interra1n changes by @xperia_remixes.\n\n"
 			"iOS/iPadOS/tvOS 15-26, bridgeOS 5-10 arm64 jailbreaking tool\n\n"
 			"\t--version\t\t\t\tPrint version\n"
 			"\t--force-revert\t\t\t\tRemove jailbreak\n"
@@ -102,6 +103,7 @@ static int usage(int e, char* prog_name)
 			"\t-h, --help\t\t\t\tShow this help\n"
 			"\t-i, --override-checkra1n <file>\t\tOverride checkra1n\n"
 			"\t-k, --override-pongo <file>\t\tOverride Pongo image\n"
+			"\t-g, --pongo-background <image>\tSet the PongoOS raindrop splash background (PNG, JPEG, BMP)\n"
 			"\t-K, --override-kpf <file>\t\tOverride kernel patchfinder\n"
 #ifdef ROOTFUL
 			"\t-l, --rootless\t\t\t\tBoots rootless. This is the default\n"
@@ -139,7 +141,7 @@ int optparse(int argc, char* argv[]) {
 	int opt;
 	int index;
 	while ((opt = getopt_long(argc, argv,
-	"DEhpvVlLdsSTtRnPIe:o:r:K:k:i:"
+	"DEhpvVlLdsSTtRnPIe:o:r:K:k:i:g:"
 #ifdef DEV_BUILD
 	"12"
 #endif
@@ -231,6 +233,10 @@ int optparse(int argc, char* argv[]) {
 				return -1;
 			}
 			snprintf(pongo_path, strlen(optarg) + 1, "%s", optarg);
+			break;
+		case 'g':
+			if (pongo_background_load(optarg) != 0)
+				return -1;
 			break;
 		case 'o':
 			if (override_file(&override_overlay, overlay_to_upload, &binpack_dmg_len, optarg))
@@ -350,7 +356,7 @@ int optparse(int argc, char* argv[]) {
 	}
 	if ((palerain_flags & palerain_option_palerain_version)) {
 		printf(
-			"palera1n " PALERAIN_VERSION "\n"
+			"interra1n " PALERAIN_VERSION "\n"
 			BUILD_COMMIT " " BUILD_NUMBER " (" BUILD_BRANCH ")\n\n"
 			"Build style: " BUILD_STYLE "\n"
 			"Build tag: " BUILD_TAG "\n"
@@ -362,6 +368,10 @@ int optparse(int argc, char* argv[]) {
 			"Build options: " BUILD_OPTIONS "\n"
 		);
 		return 0;
+	}
+	if (pongo_background_rgb != NULL && pongo_path != NULL) {
+		LOG(LOG_FATAL, "--pongo-background requires the interra1n PongoOS image and cannot be combined with --override-pongo");
+		return -1;
 	}
 
 	if (palerain_flags & palerain_option_telnetd) {
